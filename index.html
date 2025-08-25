@@ -69,56 +69,8 @@
             font-size: 1.3rem;
         }
 
-        .login-tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #e0e0e0;
-        }
-
-        .login-tab {
-            padding: 0.75rem 1rem;
-            background: none;
-            border: none;
-            color: #666;
-            font-weight: 600;
-            cursor: pointer;
-            position: relative;
-            transition: color 0.3s;
-        }
-
-        .login-tab.active {
-            color: #2c5aa0;
-        }
-
-        .login-tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #2c5aa0;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
         .form-group {
             margin-bottom: 1rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #555;
-            font-weight: 500;
-            font-size: 0.9rem;
         }
 
         .form-group input {
@@ -135,21 +87,6 @@
             border-color: #2c5aa0;
         }
 
-        .info-box {
-            background: #f0f7ff;
-            border: 1px solid #d0e0f0;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            color: #2c5aa0;
-            font-size: 0.9rem;
-        }
-
-        .info-box strong {
-            display: block;
-            margin-bottom: 0.25rem;
-        }
-
         .btn {
             width: 100%;
             padding: 0.9rem 1.5rem;
@@ -163,10 +100,6 @@
             transition: all 0.3s;
             -webkit-appearance: none;
             appearance: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
         }
 
         .btn:active {
@@ -337,12 +270,6 @@
             border: 1px solid #ff9b9b;
         }
 
-        .alert.info {
-            background: #d4e8ff;
-            color: #2c5aa0;
-            border: 1px solid #9bc4ff;
-        }
-
         .alert.show {
             display: block;
         }
@@ -363,39 +290,6 @@
 
         .hidden {
             display: none !important;
-        }
-
-        .user-info {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .user-info-text {
-            color: #666;
-        }
-
-        .user-info-text strong {
-            color: #2c5aa0;
-        }
-
-        .logout-btn {
-            padding: 0.5rem 1rem;
-            background: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .logout-btn:hover {
-            background: #c82333;
         }
 
         @media (max-width: 768px) {
@@ -421,16 +315,6 @@
                 flex: 1;
                 min-width: 120px;
             }
-
-            .user-info {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-
-            .logout-btn {
-                width: 100%;
-            }
         }
 
         @supports (-webkit-touch-callout: none) {
@@ -446,84 +330,25 @@
     </header>
 
     <div class="container">
-        <!-- Login Section -->
         <div id="loginSection" class="login-section">
             <h2>🔐 Zugang zur Foto-Galerie</h2>
             
             <div id="loginAlert" class="alert"></div>
             
-            <!-- Tab Navigation -->
-            <div class="login-tabs">
-                <button class="login-tab active" onclick="switchTab('participant')">
-                    📋 Teilnehmer
-                </button>
-                <button class="login-tab" onclick="switchTab('guest')">
-                    👥 Gast
-                </button>
-            </div>
-            
-            <!-- Participant Login -->
-            <div id="participantTab" class="tab-content active">
-                <div class="info-box">
-                    <strong>Für angemeldete Teilnehmer:</strong>
-                    Bitte geben Sie die E-Mail-Adresse ein, mit der Sie sich zum Sommerfest angemeldet haben.
+            <form id="loginForm">
+                <div class="form-group">
+                    <input type="email" id="email" placeholder="E-Mail-Adresse" required autocomplete="email">
                 </div>
-                
-                <form id="participantForm">
-                    <div class="form-group">
-                        <label for="participantEmail">E-Mail-Adresse</label>
-                        <input 
-                            type="email" 
-                            id="participantEmail" 
-                            placeholder="ihre.email@beispiel.de" 
-                            required 
-                            autocomplete="email">
-                    </div>
-                    <button type="submit" class="btn" id="participantBtn">
-                        <span id="participantBtnText">Anmelden</span>
-                        <span id="participantBtnSpinner" class="loading-spinner hidden"></span>
-                    </button>
-                </form>
-            </div>
-            
-            <!-- Guest Login -->
-            <div id="guestTab" class="tab-content">
-                <div class="info-box">
-                    <strong>Für Gäste:</strong>
-                    Bitte geben Sie den Zugangscode ein, den Sie per E-Mail oder Link erhalten haben.
+                <div class="form-group">
+                    <input type="password" id="password" placeholder="Gäste-Code: gaeste2025" autocomplete="current-password">
                 </div>
-                
-                <form id="guestForm">
-                    <div class="form-group">
-                        <label for="guestCode">Zugangscode</label>
-                        <input 
-                            type="password" 
-                            id="guestCode" 
-                            placeholder="Zugangscode eingeben" 
-                            required 
-                            autocomplete="off">
-                    </div>
-                    <button type="submit" class="btn" id="guestBtn">
-                        <span id="guestBtnText">Als Gast anmelden</span>
-                        <span id="guestBtnSpinner" class="loading-spinner hidden"></span>
-                    </button>
-                </form>
-            </div>
+                <button type="submit" class="btn" id="loginBtn">
+                    <span id="loginBtnText">Anmelden</span>
+                </button>
+            </form>
         </div>
 
-        <!-- Main App Section -->
         <div id="appSection" class="hidden">
-            <!-- User Info Bar -->
-            <div class="user-info">
-                <div class="user-info-text">
-                    Angemeldet als: <strong id="userName">-</strong>
-                </div>
-                <button class="logout-btn" onclick="logout()">
-                    🚪 Abmelden
-                </button>
-            </div>
-
-            <!-- Upload Section -->
             <div class="login-section">
                 <h2>📸 Fotos hochladen</h2>
                 
@@ -543,7 +368,6 @@
                         </button>
                     </div>
                     
-                    <!-- Hidden file inputs -->
                     <input type="file" 
                            id="fileInputGallery" 
                            accept="image/*" 
@@ -565,12 +389,11 @@
                 </div>
             </div>
 
-            <!-- Gallery Section -->
             <div class="login-section">
                 <h2>🖼️ Foto-Galerie (<span id="photoCount">0</span> Fotos)</h2>
                 <div id="photoGrid" class="photo-grid">
                     <p style="text-align: center; color: #666; padding: 2rem;">
-                        Noch keine Fotos vorhanden. Seien Sie der Erste!
+                        Noch keine Fotos vorhanden. Sei der Erste!
                     </p>
                 </div>
             </div>
@@ -578,180 +401,53 @@
     </div>
 
     <script>
-        // Configuration
         const SUPABASE_URL = 'https://database.frankrath.de';
         const SUPABASE_ANON_KEY = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc0NzA3MzU4MCwiZXhwIjo0OTAyNzQ3MTgwLCJyb2xlIjoiYW5vbiJ9.0l5w0smQh1FDN-nGnfmNbX80smyL-XcQM9C69OwE3Vo';
-        const N8N_BASE_URL = 'https://automatisierung.frankrath.de/webhook';
-        const GUEST_CODE = 'gaeste2025'; // Should be environment variable in production
+        const GUEST_CODE = 'gaeste2025';
         
-        // Initialize Supabase
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
         let currentUser = null;
         let uploadQueue = [];
         let isUploading = false;
 
-        // Check URL parameters for guest code
         document.addEventListener('DOMContentLoaded', () => {
-            // Check for saved user
             const savedUser = localStorage.getItem('sommerfest_foto_user');
             if (savedUser) {
                 currentUser = JSON.parse(savedUser);
                 showApp();
             }
-            
-            // Check URL parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            const code = urlParams.get('code');
-            const tab = urlParams.get('tab');
-            
-            if (code) {
-                // Auto-fill guest code if provided in URL
-                switchTab('guest');
-                document.getElementById('guestCode').value = code;
-                // Auto-submit if code is provided
-                document.getElementById('guestForm').dispatchEvent(new Event('submit'));
-            } else if (tab === 'guest') {
-                switchTab('guest');
-            }
         });
 
-        // Tab switching
-        function switchTab(tab) {
-            // Update tab buttons
-            document.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
-            document.querySelector(\`.login-tab:nth-child(\${tab === 'participant' ? 1 : 2})\`).classList.add('active');
-            
-            // Update tab content
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.getElementById(tab === 'participant' ? 'participantTab' : 'guestTab').classList.add('active');
-        }
-
-        // Participant Login (validates against Google Sheets)
-        document.getElementById('participantForm').addEventListener('submit', async (e) => {
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const email = document.getElementById('participantEmail').value.trim().toLowerCase();
-            const btn = document.getElementById('participantBtn');
-            const btnText = document.getElementById('participantBtnText');
-            const btnSpinner = document.getElementById('participantBtnSpinner');
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
             
-            // Show loading state
-            btn.disabled = true;
-            btnText.textContent = 'Prüfe Anmeldung...';
-            btnSpinner.classList.remove('hidden');
-            
-            try {
-                // Validate email against Google Sheets via n8n
-                const response = await fetch(\`\${N8N_BASE_URL}/get-participants\`);
-                const participants = await response.json();
-                
-                // Check if email exists in participants
-                const participant = participants.find(p => 
-                    p.email && p.email.toLowerCase() === email
-                );
-                
-                if (participant) {
-                    currentUser = { 
-                        email: participant.email,
-                        name: participant.name || email.split('@')[0],
-                        type: 'participant',
-                        loge: participant.loge || 'Unbekannt'
-                    };
-                    
-                    localStorage.setItem('sommerfest_foto_user', JSON.stringify(currentUser));
-                    showAlert('loginAlert', \`Willkommen \${currentUser.name}!\`, 'success');
-                    
-                    setTimeout(() => {
-                        showApp();
-                    }, 500);
-                } else {
-                    showAlert('loginAlert', 'Diese E-Mail-Adresse ist nicht für das Sommerfest registriert. Bitte nutzen Sie die Gast-Anmeldung oder prüfen Sie Ihre E-Mail-Adresse.', 'error');
-                    btn.disabled = false;
-                    btnText.textContent = 'Anmelden';
-                    btnSpinner.classList.add('hidden');
-                }
-            } catch (error) {
-                console.error('Error validating participant:', error);
-                // Fallback: Allow login anyway if n8n is down
+            if (password === GUEST_CODE || email) {
                 currentUser = { 
-                    email: email,
-                    name: email.split('@')[0],
-                    type: 'participant',
-                    loge: 'Unbekannt'
+                    email: email || 'gast@sommerfest2025.de', 
+                    name: email ? email.split('@')[0] : 'Gast' 
                 };
                 
                 localStorage.setItem('sommerfest_foto_user', JSON.stringify(currentUser));
-                showAlert('loginAlert', 'Anmeldung erfolgreich (Offline-Modus)', 'info');
-                
-                setTimeout(() => {
-                    showApp();
-                }, 500);
-            }
-        });
-
-        // Guest Login (with code)
-        document.getElementById('guestForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const code = document.getElementById('guestCode').value.trim();
-            const btn = document.getElementById('guestBtn');
-            const btnText = document.getElementById('guestBtnText');
-            const btnSpinner = document.getElementById('guestBtnSpinner');
-            
-            // Show loading state
-            btn.disabled = true;
-            btnText.textContent = 'Prüfe Code...';
-            btnSpinner.classList.remove('hidden');
-            
-            // Validate guest code
-            if (code === GUEST_CODE) {
-                currentUser = { 
-                    email: \`gast_\${Date.now()}@sommerfest2025.de\`,
-                    name: 'Gast',
-                    type: 'guest'
-                };
-                
-                localStorage.setItem('sommerfest_foto_user', JSON.stringify(currentUser));
-                showAlert('loginAlert', 'Willkommen als Gast!', 'success');
+                showAlert('loginAlert', 'Erfolgreich angemeldet!', 'success');
                 
                 setTimeout(() => {
                     showApp();
                 }, 500);
             } else {
-                showAlert('loginAlert', 'Ungültiger Zugangscode. Bitte prüfen Sie den Code oder kontaktieren Sie den Veranstalter.', 'error');
-                btn.disabled = false;
-                btnText.textContent = 'Als Gast anmelden';
-                btnSpinner.classList.add('hidden');
+                showAlert('loginAlert', 'Bitte E-Mail eingeben oder Gäste-Code verwenden', 'error');
             }
         });
 
-        // Show main app
         function showApp() {
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('appSection').classList.remove('hidden');
-            
-            // Update user info
-            const userNameElement = document.getElementById('userName');
-            if (currentUser.type === 'participant') {
-                userNameElement.textContent = \`\${currentUser.name} (\${currentUser.loge})\`;
-            } else {
-                userNameElement.textContent = 'Gast';
-            }
-            
             loadPhotos();
         }
 
-        // Logout function
-        function logout() {
-            if (confirm('Möchten Sie sich wirklich abmelden?')) {
-                localStorage.removeItem('sommerfest_foto_user');
-                currentUser = null;
-                location.reload();
-            }
-        }
-
-        // File Upload Handlers
         document.getElementById('selectPhotosBtn').addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -764,7 +460,6 @@
             document.getElementById('fileInputCamera').click();
         });
 
-        // File input change handlers with mobile fixes
         ['fileInputGallery', 'fileInputCamera'].forEach(inputId => {
             const input = document.getElementById(inputId);
             
@@ -773,7 +468,6 @@
             });
         });
 
-        // Universal file handler
         async function handleFileSelect(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -785,7 +479,7 @@
                 return;
             }
             
-            console.log(\`\${files.length} files selected for upload\`);
+            console.log(`${files.length} files selected for upload`);
             
             const fileArray = Array.from(files);
             uploadQueue.push(...fileArray);
@@ -797,7 +491,6 @@
             e.target.value = '';
         }
 
-        // Process upload queue
         async function processUploadQueue() {
             if (uploadQueue.length === 0) {
                 isUploading = false;
@@ -823,13 +516,13 @@
                 }
                 
                 const progress = ((totalFiles - uploadQueue.length) / totalFiles) * 100;
-                updateUploadProgress(progress, \`\${totalFiles - uploadQueue.length} von \${totalFiles} Fotos\`);
+                updateUploadProgress(progress, `${totalFiles - uploadQueue.length} von ${totalFiles} Fotos`);
             }
             
             if (failedUploads.length === 0) {
-                showAlert('uploadAlert', \`✅ \${uploadedCount} Foto(s) erfolgreich hochgeladen!\`, 'success');
+                showAlert('uploadAlert', `✅ ${uploadedCount} Foto(s) erfolgreich hochgeladen!`, 'success');
             } else {
-                showAlert('uploadAlert', \`⚠️ \${uploadedCount} erfolgreich, \${failedUploads.length} fehlgeschlagen\`, 'error');
+                showAlert('uploadAlert', `⚠️ ${uploadedCount} erfolgreich, ${failedUploads.length} fehlgeschlagen`, 'error');
             }
             
             await loadPhotos();
@@ -838,7 +531,6 @@
             hideUploadProgress();
         }
 
-        // Upload single file
         async function uploadFile(file) {
             try {
                 if (!file.type.startsWith('image/')) {
@@ -849,8 +541,8 @@
                 const timestamp = Date.now();
                 const randomStr = Math.random().toString(36).substring(7);
                 const extension = file.name.split('.').pop();
-                const fileName = \`\${timestamp}_\${randomStr}.\${extension}\`;
-                const filePath = \`uploads/\${currentUser.email}/\${fileName}\`;
+                const fileName = `${timestamp}_${randomStr}.${extension}`;
+                const filePath = `uploads/${currentUser.email}/${fileName}`;
                 
                 console.log('Uploading:', filePath);
                 
@@ -871,7 +563,6 @@
                     .insert([{
                         uploader_email: currentUser.email,
                         uploader_name: currentUser.name,
-                        uploader_type: currentUser.type,
                         filename: fileName,
                         original_filename: file.name,
                         file_path: filePath,
@@ -895,7 +586,6 @@
             }
         }
 
-        // Load and display photos
         async function loadPhotos() {
             try {
                 const { data: photos, error } = await supabase
@@ -912,11 +602,11 @@
                 const count = document.getElementById('photoCount');
                 
                 if (!photos || photos.length === 0) {
-                    grid.innerHTML = \`
+                    grid.innerHTML = `
                         <p style="text-align: center; color: #666; padding: 2rem; grid-column: 1/-1;">
-                            Noch keine Fotos vorhanden. Seien Sie der Erste!
+                            Noch keine Fotos vorhanden. Sei der Erste!
                         </p>
-                    \`;
+                    `;
                     count.textContent = '0';
                     return;
                 }
@@ -924,19 +614,19 @@
                 count.textContent = photos.length;
                 
                 grid.innerHTML = photos.map(photo => {
-                    const imageUrl = \`\${SUPABASE_URL}/storage/v1/object/public/sommerfest-fotos-2025/\${photo.file_path}\`;
+                    const imageUrl = `${SUPABASE_URL}/storage/v1/object/public/sommerfest-fotos-2025/${photo.file_path}`;
                     const uploaderName = photo.uploader_name || 'Unbekannt';
                     const uploadDate = new Date(photo.uploaded_at).toLocaleDateString('de-DE');
                     
-                    return \`
-                        <div class="photo-item" onclick="downloadPhoto('\${imageUrl}', '\${photo.original_filename}')">
-                            <img src="\${imageUrl}" alt="\${photo.original_filename}" loading="lazy">
+                    return `
+                        <div class="photo-item" onclick="downloadPhoto('${imageUrl}', '${photo.original_filename}')">
+                            <img src="${imageUrl}" alt="${photo.original_filename}" loading="lazy">
                             <div class="photo-info">
-                                <div class="photo-name">\${photo.original_filename}</div>
-                                <div class="photo-uploader">Von \${uploaderName} • \${uploadDate}</div>
+                                <div class="photo-name">${photo.original_filename}</div>
+                                <div class="photo-uploader">Von ${uploaderName} • ${uploadDate}</div>
                             </div>
                         </div>
-                    \`;
+                    `;
                 }).join('');
                 
             } catch (err) {
@@ -945,9 +635,8 @@
             }
         }
 
-        // Download photo
         function downloadPhoto(url, filename) {
-            if (confirm(\`Möchten Sie "\${filename}" herunterladen?\`)) {
+            if (confirm(`Möchten Sie "${filename}" herunterladen?`)) {
                 const a = document.createElement('a');
                 a.href = url;
                 a.download = filename;
@@ -958,11 +647,10 @@
             }
         }
 
-        // UI Helper Functions
         function showAlert(elementId, message, type) {
             const alert = document.getElementById(elementId);
             alert.textContent = message;
-            alert.className = \`alert \${type} show\`;
+            alert.className = `alert ${type} show`;
             
             setTimeout(() => {
                 alert.classList.remove('show');
@@ -981,11 +669,10 @@
         }
 
         function updateUploadProgress(percent, status) {
-            document.getElementById('progressFill').style.width = \`\${percent}%\`;
+            document.getElementById('progressFill').style.width = `${percent}%`;
             document.getElementById('uploadStatus').textContent = status;
         }
 
-        // Drag and Drop Support (Desktop)
         const uploadArea = document.getElementById('uploadArea');
 
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -1020,7 +707,6 @@
             }
         }, false);
 
-        // Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js')
@@ -1029,7 +715,6 @@
             });
         }
 
-        // Refresh photos every 30 seconds
         setInterval(() => {
             if (!isUploading && currentUser) {
                 loadPhotos();
