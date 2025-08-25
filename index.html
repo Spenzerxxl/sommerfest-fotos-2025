@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sommerfest 2025 - Foto-Galerie</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Foto-Galerie vom Sommerfest 2025 der Lübecker Freimaurer">
+    <meta name="theme-color" content="#2c5aa0">
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header h1 {
+            color: #2c5aa0;
+            text-align: center;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .login-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            background: #2c5aa0;
+            color: white;
+        }
+
+        .upload-area {
+            border: 3px dashed #2c5aa0;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(44, 90, 160, 0.05);
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>🎉 Sommerfest 2025 - Foto-Galerie</h1>
+    </header>
+
+    <div class="container">
+        <div id="loginSection" class="login-section">
+            <h2>🔐 Zugang zur Foto-Galerie</h2>
+            <form id="loginForm">
+                <input type="email" id="email" placeholder="E-Mail-Adresse" required>
+                <input type="password" id="password" placeholder="Gäste-Code (optional)">
+                <button type="submit" class="btn">Anmelden</button>
+            </form>
+        </div>
+
+        <div id="appSection" class="hidden">
+            <div class="login-section">
+                <h2>📸 Fotos hochladen</h2>
+                <div id="uploadArea" class="upload-area">
+                    <div>📸</div>
+                    <h3>Fotos hier ablegen oder klicken</h3>
+                    <input type="file" id="fileInput" accept="image/*" multiple style="display: none;">
+                </div>
+            </div>
+
+            <div class="login-section">
+                <h2>🖼️ Foto-Galerie</h2>
+                <div id="photoGrid" class="photo-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://database.frankrath.de';
+        const SUPABASE_ANON_KEY = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc0NzA3MzU4MCwiZXhwIjo0OTAyNzQ3MTgwLCJyb2xlIjoiYW5vbiJ9.0l5w0smQh1FDN-nGnfmNbX80smyL-XcQM9C69OwE3Vo';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const N8N_BASE_URL = 'https://automatisierung.frankrath.de/webhook';
+        
+        let currentUser = null;
+        
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Simplified authentication
+            if (password === 'gaeste2025' || email) {
+                currentUser = { email: email, name: email.split('@')[0] };
+                localStorage.setItem('sommerfest_foto_user', JSON.stringify(currentUser));
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('appSection').classList.remove('hidden');
+                loadPhotos();
+            }
+        });
+
+        document.getElementById('uploadArea').addEventListener('click', () => {
+            document.getElementById('fileInput').click();
+        });
+
+        document.getElementById('fileInput').addEventListener('change', async (e) => {
+            const files = Array.from(e.target.files);
+            for (let file of files) {
+                const fileName = Date.now() + '_' + file.name;
+                const filePath = 'uploads/' + currentUser.email + '/' + fileName;
+                
+                const { data, error } = await supabase.storage
+                    .from('sommerfest-fotos-2025')
+                    .upload(filePath, file);
+                
+                if (!error) {
+                    await supabase.from('fotos_2025').insert([{
+                        uploader_email: currentUser.email,
+                        uploader_name: currentUser.name,
+                        filename: fileName,
+                        original_filename: file.name,
+                        file_path: filePath,
+                        download_allowed: true,
+                        file_size: file.size,
+                        mime_type: file.type
+                    }]);
+                }
+            }
+            loadPhotos();
+        });
+
+        async function loadPhotos() {
+            const { data: photos } = await supabase
+                .from('fotos_2025')
+                .select('*')
+                .order('uploaded_at', { ascending: false });
+            
+            const grid = document.getElementById('photoGrid');
+            grid.innerHTML = photos ? photos.map(photo => {
+                const imageUrl = SUPABASE_URL + '/storage/v1/object/public/sommerfest-fotos-2025/' + photo.file_path;
+                return '<div><img src="' + imageUrl + '" style="width:100%"><p>' + photo.original_filename + '</p></div>';
+            }).join('') : '<p>Keine Fotos vorhanden</p>';
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+    </script>
+</body>
+</html>
