@@ -488,6 +488,67 @@
 </head>
 <body>
     <!-- Header -->
+        /* Lightbox Styles */
+        .lightbox-modal {
+            display: block;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            animation: fadeIn 0.3s;
+        }
+
+        .lightbox-content {
+            position: relative;
+            margin: auto;
+            padding: 20px;
+            width: 90%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10001;
+        }
+
+        .lightbox-close:hover {
+            color: #ff6b00;
+        }
+
+        @keyframes fadeIn {
+        /* Image Protection */
+        .photo-img {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            pointer-events: auto;
+        }
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
     <header class="header">
         <h1>🎉 Sommerfest 2025 - Foto-Galerie</h1>
         <p>Foto-Galerie & Upload</p>
@@ -778,6 +839,7 @@
         }
 
         // Load Photos from Database
+        // Load Photos from Database with signed URLs
         async function loadPhotos() {
             const loadingElement = document.getElementById('loadingGallery');
             loadingElement.classList.remove('hidden');
@@ -793,7 +855,31 @@
                 }
                 
                 console.log('Geladene Fotos:', result.data);
-                displayPhotos(result.data);
+                
+                // Generate signed URLs for each photo
+                const photosWithUrls = await Promise.all(result.data.map(async (photo) => {
+                    try {
+                        // Generate signed URL (valid for 1 hour)
+                        const { data, error } = await supabase.storage
+                            .from('sommerfest-fotos-2025')
+                            .createSignedUrl(photo.storage_path, 3600);
+                        
+                        if (error) throw error;
+                        
+                        return {
+                            ...photo,
+                            signedUrl: data.signedUrl
+                        };
+                    } catch (err) {
+                        console.error('Error creating signed URL for', photo.filename, err);
+                        return {
+                            ...photo,
+                            signedUrl: null
+                        };
+                    }
+                }));
+                
+                displayPhotos(photosWithUrls);
                 
             } catch (error) {
                 console.error('Load photos error:', error);
@@ -815,24 +901,60 @@
                 return;
             }
             
-            grid.innerHTML = photos.map(function(photo) {
+            // Filter out photos without valid URLs
+            const validPhotos = photos.filter(p => p.signedUrl);
+            
+            grid.innerHTML = validPhotos.map(function(photo) {
                 return createPhotoCard(photo);
             }).join('');
         }
 
-        // Create Photo Card HTML
+        // Create Photo Card HTML with protected images
         function createPhotoCard(photo) {
-            const imageUrl = SUPABASE_URL + '/storage/v1/object/public/sommerfest-fotos-2025/' + photo.storage_path;
-            const uploadDate = new Date(photo.uploaded_at).toLocaleDateString('de-DE');
+            const imageUrl = photo.signedUrl;
+        // Open Lightbox with protection
+        function openLightbox(imageUrl, title, allowDownload) {
+            if (!imageUrl) return;
+            
+            const modal = document.createElement('div');
+            modal.className = 'lightbox-modal';
+            modal.innerHTML = 
+                '<div class="lightbox-content" onclick="event.stopPropagation()">' +
+                '<span class="lightbox-close" onclick="closeLightbox()">&times;</span>' +
+                '<img src="' + imageUrl + '" alt="' + title + '" ' +
+                'oncontextmenu="return false;" ondragstart="return false;">' +
+                (!allowDownload ? '<div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: white; padding: 10px 20px; border-radius: 8px;">🔒 Dieses Foto ist geschützt</div>' : '') +
+                '</div>';
+            modal.onclick = closeLightbox;
+            document.body.appendChild(modal);
+            
+            // Prevent scrolling
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close Lightbox
+        function closeLightbox() {
+            const modal = document.querySelector('.lightbox-modal');
+            if (modal) {
+                modal.remove();
+                document.body.style.overflow = 'auto';
+            }
+        }
             const downloadButton = photo.download_permission ? 
                 '<button class="btn btn-secondary" onclick="downloadPhoto(\'' + photo.storage_path + '\', \'' + photo.filename + '\')">' +
-                '💾 Download</button>' : '';
+                '💾 Download</button>' : 
+                '<span style="color: #999; font-size: 0.9rem;">🔒 Download nicht erlaubt</span>';
             
             return '<div class="photo-card">' +
+                '<div style="position: relative;">' +
                 '<img src="' + imageUrl + '" ' +
                 'alt="' + photo.filename + '" ' +
                 'class="photo-img" ' +
-                'onclick="openLightbox(\'' + imageUrl + '\', \'' + photo.filename + '\')">' +
+                'oncontextmenu="return false;" ' +  // Disable right-click
+                'ondragstart="return false;" ' +     // Disable drag
+                'onclick="openLightbox(\'' + imageUrl + '\', \'' + photo.filename + '\', ' + photo.download_permission + ')">' +
+                (!photo.download_permission ? '<div style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 5px 10px; border-radius: 5px; font-size: 0.8rem;">🔒 Geschützt</div>' : '') +
+                '</div>' +
                 '<div class="photo-info">' +
                 '<h4>' + photo.filename + '</h4>' +
                 '<div class="photo-meta">' +
@@ -844,15 +966,27 @@
                 '</div></div></div>';
         }
 
-        // Download Photo
-        function downloadPhoto(filePath, filename) {
-            const url = SUPABASE_URL + '/storage/v1/object/public/sommerfest-fotos-2025/' + filePath;
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+        // Download Photo with signed URL
+        async function downloadPhoto(filePath, filename) {
+            try {
+                // Generate a fresh signed URL for download
+                const { data, error } = await supabase.storage
+                    .from('sommerfest-fotos-2025')
+                    .createSignedUrl(filePath, 60); // Valid for 1 minute
+                
+                if (error) throw error;
+                
+                // Create download link
+                const link = document.createElement('a');
+                link.href = data.signedUrl;
+                link.download = filename;
+                link.click();
+                
+                showStatus('Download gestartet für: ' + filename, 'success');
+            } catch (error) {
+                console.error('Download error:', error);
+                showStatus('Fehler beim Download. Bitte versuchen Sie es erneut.', 'error');
+            }
         }
 
         // Lightbox functionality
