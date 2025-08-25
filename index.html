@@ -625,7 +625,8 @@
                     const response = await fetch(N8N_BASE_URL + '/get-participants');
                     if (!response.ok) return false;
                     
-                    const participants = await response.json();
+                    const data = await response.json();
+                const participants = data.participants || [];
                     return participants.some(p => 
                         p.email.toLowerCase() === user.email.toLowerCase()
                     );
@@ -668,8 +669,9 @@
                     throw new Error('Fehler beim Abrufen der Teilnehmerliste');
                 }
                 
-                const participants = await response.json();
-                const participant = participants.find(p => 
+                const data = await response.json();
+                const participants = data.participants || [];
+                const participant = (participants || []).find(p => 
                     p.email.toLowerCase() === email.toLowerCase()
                 );
                 
