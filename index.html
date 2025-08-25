@@ -12,6 +12,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <link rel="manifest" href="manifest.json">
     
+    <!-- Icons für PWA -->
+    <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    
     <!-- Supabase Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
@@ -30,6 +35,7 @@
             color: #333;
         }
 
+        /* Header */
         .header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -49,56 +55,65 @@
             margin: 0;
         }
 
+        .header p {
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            cursor: pointer;
+        }
+
+        /* Container */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 1rem;
+            padding: 2rem 1rem;
         }
 
+        /* Login Section */
         .login-section {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
         }
 
-        .login-section h2 {
-            color: #2c5aa0;
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
-        }
-
-        .login-tabs {
+        /* Tab Navigation */
+        .tabs {
             display: flex;
             gap: 1rem;
             margin-bottom: 1.5rem;
-            border-bottom: 2px solid #e0e0e0;
+            border-bottom: 2px solid #e1e5e9;
         }
 
-        .login-tab {
-            padding: 0.75rem 1rem;
+        .tab {
+            padding: 0.75rem 1.5rem;
             background: none;
             border: none;
+            border-bottom: 3px solid transparent;
             color: #666;
             font-weight: 600;
             cursor: pointer;
-            position: relative;
-            transition: color 0.3s;
+            transition: all 0.3s ease;
         }
 
-        .login-tab.active {
+        .tab.active {
             color: #2c5aa0;
-        }
-
-        .login-tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #2c5aa0;
+            border-bottom-color: #2c5aa0;
         }
 
         .tab-content {
@@ -109,74 +124,94 @@
             display: block;
         }
 
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
         .form-group {
-            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
         }
 
         .form-group label {
-            display: block;
             margin-bottom: 0.5rem;
-            color: #555;
-            font-weight: 500;
-            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2c5aa0;
         }
 
         .form-group input {
-            width: 100%;
             padding: 0.75rem;
-            font-size: 16px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid #e1e5e9;
             border-radius: 8px;
-            transition: border-color 0.3s;
+            font-size: 1rem;
+            transition: all 0.3s ease;
         }
 
         .form-group input:focus {
             outline: none;
             border-color: #2c5aa0;
-        }
-
-        .info-box {
-            background: #f0f7ff;
-            border: 1px solid #d0e0f0;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            color: #2c5aa0;
-            font-size: 0.9rem;
-        }
-
-        .info-box strong {
-            display: block;
-            margin-bottom: 0.25rem;
+            box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
         }
 
         .btn {
-            width: 100%;
-            padding: 0.9rem 1.5rem;
+            padding: 0.75rem 1.5rem;
             border: none;
             border-radius: 8px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .btn-primary {
             background: #2c5aa0;
             color: white;
-            transition: all 0.3s;
-            -webkit-appearance: none;
-            appearance: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
         }
 
-        .btn:active {
-            transform: scale(0.98);
-            background: #234a87;
+        .btn-primary:hover {
+            background: #1e3c72;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(44, 90, 160, 0.3);
         }
 
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
+        .btn-secondary {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        /* Permission Alert */
+        .permission-alert {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .permission-alert h4 {
+            color: #856404;
+            margin-bottom: 0.5rem;
         }
 
         .upload-area {
@@ -187,678 +222,604 @@
             cursor: pointer;
             transition: all 0.3s ease;
             background: rgba(44, 90, 160, 0.05);
-            position: relative;
-            min-height: 150px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        }
+
+        .upload-area:hover {
+            border-color: #1e3c72;
+            background: rgba(44, 90, 160, 0.1);
         }
 
         .upload-area.dragover {
-            background: rgba(44, 90, 160, 0.15);
-            border-color: #1e3c72;
-            transform: scale(1.02);
-        }
-
-        .upload-area.uploading {
-            opacity: 0.6;
-            pointer-events: none;
+            border-color: #28a745;
+            background: rgba(40, 167, 69, 0.1);
         }
 
         .upload-icon {
             font-size: 3rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .upload-text {
             color: #2c5aa0;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
         }
 
-        .upload-subtext {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .upload-buttons {
-            display: flex;
+        /* Mobile Upload Buttons */
+        .mobile-upload-buttons {
+            display: none;
             gap: 1rem;
             margin-top: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
         }
 
-        .upload-btn {
-            padding: 0.75rem 1.5rem;
-            background: #2c5aa0;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.95rem;
+        @media (max-width: 768px) {
+            .mobile-upload-buttons {
+                display: flex;
+                flex-direction: column;
+            }
         }
 
-        .upload-btn:active {
-            transform: scale(0.95);
-        }
-
-        .upload-progress {
-            margin-top: 1rem;
-            display: none;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background: #e0e0e0;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: #2c5aa0;
-            transition: width 0.3s;
-            border-radius: 3px;
-        }
-
-        .upload-status {
-            margin-top: 0.5rem;
-            color: #666;
-            font-size: 0.9rem;
-        }
-
+        /* Photo Grid */
         .photo-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
         }
 
-        .photo-item {
-            background: white;
-            border-radius: 8px;
+        .photo-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
         }
 
-        .photo-item:active {
-            transform: scale(0.98);
+        .photo-card:hover {
+            transform: translateY(-5px);
         }
 
-        .photo-item img {
+        .photo-img {
             width: 100%;
             height: 200px;
             object-fit: cover;
-            display: block;
+            cursor: pointer;
         }
 
         .photo-info {
-            padding: 0.75rem;
+            padding: 1rem;
         }
 
-        .photo-name {
-            font-weight: 500;
-            color: #333;
+        .photo-info h4 {
+            color: #2c5aa0;
+            margin-bottom: 0.5rem;
             font-size: 0.9rem;
+            white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;
         }
 
-        .photo-uploader {
+        .photo-meta {
+            font-size: 0.875rem;
             color: #666;
-            font-size: 0.8rem;
-            margin-top: 0.25rem;
-        }
-
-        .alert {
-            padding: 1rem;
-            border-radius: 8px;
             margin-bottom: 1rem;
-            display: none;
         }
 
-        .alert.success {
-            background: #d4f8d4;
-            color: #2d6a2d;
-            border: 1px solid #9bd89b;
+        .photo-actions {
+            display: flex;
+            gap: 0.5rem;
         }
 
-        .alert.error {
-            background: #ffd4d4;
-            color: #8b2929;
-            border: 1px solid #ff9b9b;
-        }
-
-        .alert.info {
-            background: #d4e8ff;
-            color: #2c5aa0;
-            border: 1px solid #9bc4ff;
-        }
-
-        .alert.show {
-            display: block;
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #2c5aa0;
             border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
+        /* Status Messages */
+        .status-message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        /* Hidden Class */
         .hidden {
             display: none !important;
         }
 
-        .user-info {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .user-info-text {
-            color: #666;
-        }
-
-        .user-info-text strong {
-            color: #2c5aa0;
-        }
-
-        .logout-btn {
-            padding: 0.5rem 1rem;
-            background: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .logout-btn:hover {
-            background: #c82333;
-        }
-
+        /* Responsive Design */
         @media (max-width: 768px) {
             .container {
-                padding: 0.5rem;
-            }
-            
-            .login-section {
                 padding: 1rem;
-                margin-bottom: 1rem;
             }
             
             .photo-grid {
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-                gap: 0.5rem;
-            }
-            
-            .upload-buttons {
-                width: 100%;
-            }
-            
-            .upload-btn {
-                flex: 1;
-                min-width: 120px;
-            }
-
-            .user-info {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
+                gap: 0.75rem;
             }
 
             .logout-btn {
+                position: static;
                 width: 100%;
-            }
-        }
-
-        @supports (-webkit-touch-callout: none) {
-            input[type="file"] {
-                -webkit-appearance: none;
+                margin-top: 1rem;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Header -->
     <header class="header">
-        <h1>🎉 Sommerfest 2025 - Fotos</h1>
+        <h1>🎉 Sommerfest 2025</h1>
+        <p>Foto-Galerie & Upload</p>
+        <button id="logoutBtn" class="logout-btn hidden" onclick="logout()">
+            🚪 Abmelden
+        </button>
     </header>
 
+    <!-- Main Container -->
     <div class="container">
+        <!-- Status Messages -->
+        <div id="statusMessage" class="status-message hidden"></div>
+
         <!-- Login Section -->
         <div id="loginSection" class="login-section">
             <h2>🔐 Zugang zur Foto-Galerie</h2>
             
-            <div id="loginAlert" class="alert"></div>
-            
             <!-- Tab Navigation -->
-            <div class="login-tabs">
-                <button class="login-tab active" onclick="switchTab('participant')">
-                    📋 Teilnehmer
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('teilnehmer')">
+                    Teilnehmer
                 </button>
-                <button class="login-tab" onclick="switchTab('guest')">
-                    👥 Gast
+                <button class="tab" onclick="switchTab('gaeste')">
+                    Gäste
                 </button>
             </div>
-            
-            <!-- Participant Login -->
-            <div id="participantTab" class="tab-content active">
-                <div class="info-box">
-                    <strong>Für angemeldete Teilnehmer:</strong>
-                    Bitte geben Sie die E-Mail-Adresse ein, mit der Sie sich zum Sommerfest angemeldet haben.
-                </div>
-                
-                <form id="participantForm">
+
+            <!-- Teilnehmer Tab -->
+            <div id="teilnehmerTab" class="tab-content active">
+                <p style="margin-bottom: 1.5rem; color: #666;">
+                    Geben Sie Ihre E-Mail-Adresse ein, mit der Sie sich für das Sommerfest angemeldet haben.
+                </p>
+                <form id="teilnehmerForm" class="login-form">
                     <div class="form-group">
-                        <label for="participantEmail">E-Mail-Adresse</label>
+                        <label for="teilnehmerEmail">E-Mail-Adresse:</label>
                         <input 
                             type="email" 
-                            id="participantEmail" 
-                            placeholder="ihre.email@beispiel.de" 
+                            id="teilnehmerEmail" 
                             required 
-                            autocomplete="email">
+                            placeholder="ihre.email@beispiel.de"
+                            autocomplete="email"
+                        >
                     </div>
-                    <button type="submit" class="btn" id="participantBtn">
-                        <span id="participantBtnText">Anmelden</span>
-                        <span id="participantBtnSpinner" class="loading-spinner hidden"></span>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="button-text">Als Teilnehmer anmelden</span>
+                        <span class="spinner hidden"></span>
                     </button>
                 </form>
             </div>
-            
-            <!-- Guest Login -->
-            <div id="guestTab" class="tab-content">
-                <div class="info-box">
-                    <strong>Für Gäste:</strong>
-                    Bitte geben Sie den Zugangscode ein, den Sie per E-Mail oder Link erhalten haben.
-                </div>
-                
-                <form id="guestForm">
+
+            <!-- Gäste Tab -->
+            <div id="gaesteTab" class="tab-content">
+                <p style="margin-bottom: 1.5rem; color: #666;">
+                    Geben Sie den Zugangscode ein, den Sie von Ihrem Gastgeber erhalten haben.
+                </p>
+                <form id="gaesteForm" class="login-form">
                     <div class="form-group">
-                        <label for="guestCode">Zugangscode</label>
+                        <label for="gaesteName">Ihr Name:</label>
+                        <input 
+                            type="text" 
+                            id="gaesteName" 
+                            required 
+                            placeholder="Max Mustermann"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label for="gaesteCode">Zugangscode:</label>
                         <input 
                             type="password" 
-                            id="guestCode" 
-                            placeholder="Zugangscode eingeben" 
+                            id="gaesteCode" 
                             required 
-                            autocomplete="off">
+                            placeholder="Code vom Gastgeber"
+                            autocomplete="off"
+                        >
                     </div>
-                    <button type="submit" class="btn" id="guestBtn">
-                        <span id="guestBtnText">Als Gast anmelden</span>
-                        <span id="guestBtnSpinner" class="loading-spinner hidden"></span>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="button-text">Als Gast anmelden</span>
+                        <span class="spinner hidden"></span>
                     </button>
                 </form>
             </div>
         </div>
 
-        <!-- Main App Section -->
+        <!-- Main App Section (hidden initially) -->
         <div id="appSection" class="hidden">
-            <!-- User Info Bar -->
-            <div class="user-info">
-                <div class="user-info-text">
-                    Angemeldet als: <strong id="userName">-</strong>
-                </div>
-                <button class="logout-btn" onclick="logout()">
-                    🚪 Abmelden
-                </button>
-            </div>
-
+            
             <!-- Upload Section -->
-            <div class="login-section">
+            <div class="upload-section">
                 <h2>📸 Fotos hochladen</h2>
-                
-                <div id="uploadAlert" class="alert"></div>
-                
-                <div id="uploadArea" class="upload-area">
-                    <div class="upload-icon">📷</div>
-                    <div class="upload-text">Fotos auswählen</div>
-                    <div class="upload-subtext">Tippen zum Auswählen oder Fotografieren</div>
-                    
-                    <div class="upload-buttons">
-                        <button class="upload-btn" id="selectPhotosBtn">
-                            📁 Aus Galerie
-                        </button>
-                        <button class="upload-btn" id="takePictureBtn">
-                            📷 Foto aufnehmen
-                        </button>
-                    </div>
-                    
-                    <!-- Hidden file inputs -->
-                    <input type="file" 
-                           id="fileInputGallery" 
-                           accept="image/*" 
-                           multiple 
-                           style="display: none;">
-                    
-                    <input type="file" 
-                           id="fileInputCamera" 
-                           accept="image/*" 
-                           capture="environment" 
-                           style="display: none;">
+                <p style="margin-bottom: 1rem; color: #666;">
+                    Laden Sie Ihre schönsten Momente vom Sommerfest hoch!
+                </p>
+
+                <!-- Permission Alert -->
+                <div class="permission-alert">
+                    <h4>⚠️ Wichtig: Download-Berechtigung</h4>
+                    <label style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="checkbox" id="allowDownload" style="width: 20px; height: 20px;">
+                        <span><strong>Ich erlaube anderen Teilnehmern, meine Fotos herunterzuladen</strong></span>
+                    </label>
+                    <p style="margin-top: 0.5rem; font-size: 0.875rem; color: #666;">
+                        Wenn Sie dies nicht aktivieren, können andere Ihre Fotos nur ansehen, aber nicht herunterladen.
+                    </p>
                 </div>
-                
-                <div id="uploadProgress" class="upload-progress">
-                    <div class="progress-bar">
-                        <div id="progressFill" class="progress-fill" style="width: 0%"></div>
+
+                <!-- Desktop Upload Area -->
+                <div id="uploadArea" class="upload-area">
+                    <div class="upload-icon">📸</div>
+                    <h3>Fotos hier ablegen oder klicken</h3>
+                    <p>Mehrere Dateien möglich • JPG, PNG, HEIC • Max. 10MB pro Datei</p>
+                    <input 
+                        type="file" 
+                        id="fileInput" 
+                        accept="image/*" 
+                        multiple 
+                        style="display: none;"
+                    >
+                </div>
+
+                <!-- Mobile Upload Buttons -->
+                <div class="mobile-upload-buttons">
+                    <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                        📷 Aus Galerie wählen
+                    </button>
+                    <button class="btn btn-secondary" onclick="document.getElementById('cameraInput').click()">
+                        📸 Foto aufnehmen
+                    </button>
+                    <input 
+                        type="file" 
+                        id="cameraInput" 
+                        accept="image/*" 
+                        capture="camera"
+                        style="display: none;"
+                    >
+                </div>
+
+                <!-- Upload Progress -->
+                <div id="uploadProgress" class="hidden">
+                    <div style="margin: 1rem 0;">
+                        <div style="background: #e9ecef; height: 8px; border-radius: 4px; overflow: hidden;">
+                            <div id="progressBar" style="background: #28a745; height: 100%; width: 0%; transition: width 0.3s ease;"></div>
+                        </div>
+                        <p id="progressText" style="text-align: center; margin-top: 0.5rem; font-weight: 600;">Lade hoch...</p>
                     </div>
-                    <div id="uploadStatus" class="upload-status">Uploading...</div>
                 </div>
             </div>
 
-            <!-- Gallery Section -->
-            <div class="login-section">
-                <h2>🖼️ Foto-Galerie (<span id="photoCount">0</span> Fotos)</h2>
+            <!-- Photo Gallery -->
+            <div class="upload-section">
+                <h2>🖼️ Foto-Galerie</h2>
+                <p style="margin-bottom: 1.5rem; color: #666;">
+                    Alle hochgeladenen Fotos vom Sommerfest 2025
+                </p>
+
                 <div id="photoGrid" class="photo-grid">
-                    <p style="text-align: center; color: #666; padding: 2rem;">
-                        Noch keine Fotos vorhanden. Seien Sie der Erste!
-                    </p>
+                    <!-- Photos will be loaded here -->
+                </div>
+
+                <div id="loadingGallery" class="hidden" style="text-align: center; padding: 2rem;">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 1rem;">Lade Fotos...</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Configuration
+        // Supabase Konfiguration
         const SUPABASE_URL = 'https://database.frankrath.de';
         const SUPABASE_ANON_KEY = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc0NzA3MzU4MCwiZXhwIjo0OTAyNzQ3MTgwLCJyb2xlIjoiYW5vbiJ9.0l5w0smQh1FDN-nGnfmNbX80smyL-XcQM9C69OwE3Vo';
-        const N8N_BASE_URL = 'https://automatisierung.frankrath.de/webhook';
-        const GUEST_CODE = 'gaeste2025'; // Should be environment variable in production
         
-        // Initialize Supabase
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // n8n API URLs
+        const N8N_BASE_URL = 'https://automatisierung.frankrath.de/webhook';
         
+        // Constants
+        const GUEST_ACCESS_CODE = 'gaeste2025';
+        
+        // App State
         let currentUser = null;
         let uploadQueue = [];
-        let isUploading = false;
+        
+        // DOM Elements
+        const loginSection = document.getElementById('loginSection');
+        const appSection = document.getElementById('appSection');
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const cameraInput = document.getElementById('cameraInput');
+        const photoGrid = document.getElementById('photoGrid');
+        const statusMessage = document.getElementById('statusMessage');
+        const logoutBtn = document.getElementById('logoutBtn');
 
-        // Check URL parameters for guest code
-        document.addEventListener('DOMContentLoaded', () => {
-            // Check for saved user
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', initializeApp);
+
+        // Form Event Listeners
+        document.getElementById('teilnehmerForm').addEventListener('submit', handleTeilnehmerLogin);
+        document.getElementById('gaesteForm').addEventListener('submit', handleGaesteLogin);
+
+        // Upload Event Listeners
+        uploadArea.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('dragover', handleDragOver);
+        uploadArea.addEventListener('drop', handleDrop);
+        uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+        fileInput.addEventListener('change', handleFileSelect);
+        cameraInput.addEventListener('change', handleFileSelect);
+
+        // Initialize App
+        async function initializeApp() {
+            console.log('🚀 Foto-System initialisiert');
+            
+            // Clear old localStorage data to prevent auto-login issues
             const savedUser = localStorage.getItem('sommerfest_foto_user');
             if (savedUser) {
-                currentUser = JSON.parse(savedUser);
-                showApp();
+                try {
+                    const user = JSON.parse(savedUser);
+                    // Validate saved session is still valid
+                    const isValid = await validateSavedSession(user);
+                    if (isValid) {
+                        currentUser = user;
+                        showApp();
+                        loadPhotos();
+                    } else {
+                        // Clear invalid session
+                        localStorage.removeItem('sommerfest_foto_user');
+                    }
+                } catch (error) {
+                    // Clear corrupted data
+                    localStorage.removeItem('sommerfest_foto_user');
+                }
             }
-            
-            // Check URL parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            const code = urlParams.get('code');
-            const tab = urlParams.get('tab');
-            
-            if (code) {
-                // Auto-fill guest code if provided in URL
-                switchTab('guest');
-                document.getElementById('guestCode').value = code;
-                // Auto-submit if code is provided
-                setTimeout(() => {
-                    document.getElementById('guestForm').dispatchEvent(new Event('submit'));
-                }, 100);
-            } else if (tab === 'guest') {
-                switchTab('guest');
-            }
-        });
+        }
 
-        // Tab switching - WITHOUT template literals
+        // Validate saved session
+        async function validateSavedSession(user) {
+            try {
+                // Quick validation - check if user data is complete
+                if (!user.email || !user.name) {
+                    return false;
+                }
+                
+                // For guests, just check if they have the right structure
+                if (user.isGuest && user.userType === 'guest') {
+                    return true;
+                }
+                
+                // For participants, verify against the list
+                if (user.userType === 'participant') {
+                    const response = await fetch(N8N_BASE_URL + '/get-participants');
+                    if (!response.ok) return false;
+                    
+                    const participants = await response.json();
+                    return participants.some(p => 
+                        p.email.toLowerCase() === user.email.toLowerCase()
+                    );
+                }
+                
+                return false;
+            } catch (error) {
+                console.error('Session validation error:', error);
+                return false;
+            }
+        }
+
+        // Switch Tabs
         function switchTab(tab) {
             // Update tab buttons
-            document.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
-            const tabIndex = tab === 'participant' ? 1 : 2;
-            document.querySelector('.login-tab:nth-child(' + tabIndex + ')').classList.add('active');
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
             
             // Update tab content
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            const tabId = tab === 'participant' ? 'participantTab' : 'guestTab';
-            document.getElementById(tabId).classList.add('active');
+            if (tab === 'teilnehmer') {
+                document.getElementById('teilnehmerTab').classList.add('active');
+            } else {
+                document.getElementById('gaesteTab').classList.add('active');
+            }
         }
 
-        // Participant Login (validates against Google Sheets)
-        document.getElementById('participantForm').addEventListener('submit', async (e) => {
+        // Handle Teilnehmer Login
+        async function handleTeilnehmerLogin(e) {
             e.preventDefault();
             
-            const email = document.getElementById('participantEmail').value.trim().toLowerCase();
-            const btn = document.getElementById('participantBtn');
-            const btnText = document.getElementById('participantBtnText');
-            const btnSpinner = document.getElementById('participantBtnSpinner');
+            const email = document.getElementById('teilnehmerEmail').value.trim();
             
-            // Show loading state
-            btn.disabled = true;
-            btnText.textContent = 'Prüfe Anmeldung...';
-            btnSpinner.classList.remove('hidden');
+            setLoginLoading(e.target, true);
             
             try {
-                // Validate email against Google Sheets via n8n
+                // Validate against participants list
                 const response = await fetch(N8N_BASE_URL + '/get-participants');
-                const participants = await response.json();
+                if (!response.ok) {
+                    throw new Error('Fehler beim Abrufen der Teilnehmerliste');
+                }
                 
-                // Check if email exists in participants
+                const participants = await response.json();
                 const participant = participants.find(p => 
-                    p.email && p.email.toLowerCase() === email
+                    p.email.toLowerCase() === email.toLowerCase()
                 );
                 
                 if (participant) {
-                    currentUser = { 
+                    currentUser = {
                         email: participant.email,
                         name: participant.name || email.split('@')[0],
-                        type: 'participant',
-                        loge: participant.loge || 'Unbekannt'
+                        userType: 'participant',
+                        isGuest: false
                     };
                     
+                    // Save to localStorage
                     localStorage.setItem('sommerfest_foto_user', JSON.stringify(currentUser));
-                    showAlert('loginAlert', 'Willkommen ' + currentUser.name + '!', 'success');
                     
-                    setTimeout(() => {
-                        showApp();
-                    }, 500);
+                    showStatus('Willkommen zurück! 🎉', 'success');
+                    showApp();
+                    loadPhotos();
                 } else {
-                    showAlert('loginAlert', 'Diese E-Mail-Adresse ist nicht für das Sommerfest registriert. Bitte nutzen Sie die Gast-Anmeldung oder prüfen Sie Ihre E-Mail-Adresse.', 'error');
-                    btn.disabled = false;
-                    btnText.textContent = 'Anmelden';
-                    btnSpinner.classList.add('hidden');
+                    showStatus('Diese E-Mail-Adresse ist nicht in der Teilnehmerliste. Bitte überprüfen Sie Ihre Eingabe.', 'error');
                 }
             } catch (error) {
-                console.error('Error validating participant:', error);
-                // Fallback: Allow login anyway if n8n is down
-                currentUser = { 
-                    email: email,
-                    name: email.split('@')[0],
-                    type: 'participant',
-                    loge: 'Unbekannt'
-                };
-                
-                localStorage.setItem('sommerfest_foto_user', JSON.stringify(currentUser));
-                showAlert('loginAlert', 'Anmeldung erfolgreich (Offline-Modus)', 'info');
-                
-                setTimeout(() => {
-                    showApp();
-                }, 500);
-            }
-        });
-
-        // Guest Login (with code)
-        document.getElementById('guestForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const code = document.getElementById('guestCode').value.trim();
-            const btn = document.getElementById('guestBtn');
-            const btnText = document.getElementById('guestBtnText');
-            const btnSpinner = document.getElementById('guestBtnSpinner');
-            
-            // Show loading state
-            btn.disabled = true;
-            btnText.textContent = 'Prüfe Code...';
-            btnSpinner.classList.remove('hidden');
-            
-            // Validate guest code
-            if (code === GUEST_CODE) {
-                currentUser = { 
-                    email: 'gast_' + Date.now() + '@sommerfest2025.de',
-                    name: 'Gast',
-                    type: 'guest'
-                };
-                
-                localStorage.setItem('sommerfest_foto_user', JSON.stringify(currentUser));
-                showAlert('loginAlert', 'Willkommen als Gast!', 'success');
-                
-                setTimeout(() => {
-                    showApp();
-                }, 500);
-            } else {
-                showAlert('loginAlert', 'Ungültiger Zugangscode. Bitte prüfen Sie den Code oder kontaktieren Sie den Veranstalter.', 'error');
-                btn.disabled = false;
-                btnText.textContent = 'Als Gast anmelden';
-                btnSpinner.classList.add('hidden');
-            }
-        });
-
-        // Show main app
-        function showApp() {
-            document.getElementById('loginSection').classList.add('hidden');
-            document.getElementById('appSection').classList.remove('hidden');
-            
-            // Update user info
-            const userNameElement = document.getElementById('userName');
-            if (currentUser.type === 'participant') {
-                userNameElement.textContent = currentUser.name + ' (' + currentUser.loge + ')';
-            } else {
-                userNameElement.textContent = 'Gast';
+                console.error('Login error:', error);
+                showStatus('Verbindungsfehler. Bitte versuchen Sie es später erneut.', 'error');
             }
             
-            loadPhotos();
+            setLoginLoading(e.target, false);
         }
 
-        // Logout function
+        // Handle Gäste Login
+        async function handleGaesteLogin(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('gaesteName').value.trim();
+            const code = document.getElementById('gaesteCode').value;
+            
+            setLoginLoading(e.target, true);
+            
+            if (code === GUEST_ACCESS_CODE) {
+                currentUser = {
+                    email: 'gast_' + Date.now() + '@sommerfest.de',
+                    name: name,
+                    userType: 'guest',
+                    isGuest: true
+                };
+                
+                // Save to localStorage
+                localStorage.setItem('sommerfest_foto_user', JSON.stringify(currentUser));
+                
+                showStatus('Willkommen als Gast! 🎉', 'success');
+                showApp();
+                loadPhotos();
+            } else {
+                showStatus('Ungültiger Zugangscode. Bitte fragen Sie Ihren Gastgeber nach dem richtigen Code.', 'error');
+            }
+            
+            setLoginLoading(e.target, false);
+        }
+
+        // Logout
         function logout() {
             if (confirm('Möchten Sie sich wirklich abmelden?')) {
                 localStorage.removeItem('sommerfest_foto_user');
                 currentUser = null;
-                location.reload();
+                loginSection.classList.remove('hidden');
+                appSection.classList.add('hidden');
+                logoutBtn.classList.add('hidden');
+                showStatus('Sie wurden erfolgreich abgemeldet.', 'info');
+                
+                // Reset forms
+                document.getElementById('teilnehmerForm').reset();
+                document.getElementById('gaesteForm').reset();
             }
+        }
+
+        // Show App Interface
+        function showApp() {
+            loginSection.classList.add('hidden');
+            appSection.classList.remove('hidden');
+            logoutBtn.classList.remove('hidden');
+            document.querySelector('.upload-section').style.display = 'block';
+            
+            // Hide camera button on desktop
+            if (!isMobileDevice()) {
+                const cameraBtn = document.querySelector('.mobile-upload-buttons button:nth-child(2)');
+                if (cameraBtn) cameraBtn.style.display = 'none';
+            }
+        }
+
+        // Check if mobile device
+        function isMobileDevice() {
+            return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         }
 
         // File Upload Handlers
-        document.getElementById('selectPhotosBtn').addEventListener('click', (e) => {
+        function handleDragOver(e) {
             e.preventDefault();
-            e.stopPropagation();
-            document.getElementById('fileInputGallery').click();
-        });
-
-        document.getElementById('takePictureBtn').addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            document.getElementById('fileInputCamera').click();
-        });
-
-        // File input change handlers with mobile fixes
-        ['fileInputGallery', 'fileInputCamera'].forEach(inputId => {
-            const input = document.getElementById(inputId);
-            
-            ['change', 'input'].forEach(eventType => {
-                input.addEventListener(eventType, handleFileSelect, false);
-            });
-        });
-
-        // Universal file handler
-        async function handleFileSelect(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const files = e.target.files;
-            
-            if (!files || files.length === 0) {
-                console.log('No files selected');
-                return;
-            }
-            
-            console.log(files.length + ' files selected for upload');
-            
-            const fileArray = Array.from(files);
-            uploadQueue.push(...fileArray);
-            
-            if (!isUploading) {
-                processUploadQueue();
-            }
-            
-            e.target.value = '';
+            uploadArea.classList.add('dragover');
         }
 
-        // Process upload queue
-        async function processUploadQueue() {
-            if (uploadQueue.length === 0) {
-                isUploading = false;
-                hideUploadProgress();
+        function handleDrop(e) {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = Array.from(e.dataTransfer.files);
+            handleFiles(files);
+        }
+
+        function handleFileSelect(e) {
+            const files = Array.from(e.target.files);
+            handleFiles(files);
+        }
+
+        async function handleFiles(files) {
+            const imageFiles = files.filter(file => file.type.startsWith('image/'));
+            
+            if (imageFiles.length === 0) {
+                showStatus('Bitte wählen Sie nur Bilddateien aus.', 'error');
                 return;
             }
             
-            isUploading = true;
-            showUploadProgress();
+            // Check permission checkbox
+            const allowDownload = document.getElementById('allowDownload').checked;
             
-            const totalFiles = uploadQueue.length;
-            let uploadedCount = 0;
-            let failedUploads = [];
+            if (!allowDownload) {
+                if (!confirm('Sie haben die Download-Berechtigung nicht aktiviert. Ihre Fotos können nur angesehen, aber nicht heruntergeladen werden. Fortfahren?')) {
+                    return;
+                }
+            }
             
-            while (uploadQueue.length > 0) {
-                const file = uploadQueue.shift();
-                const success = await uploadFile(file);
-                
-                if (success) {
-                    uploadedCount++;
-                } else {
-                    failedUploads.push(file.name);
+            for (let file of imageFiles) {
+                if (file.size > 10 * 1024 * 1024) { // 10MB limit
+                    showStatus('Datei ' + file.name + ' ist zu groß (max. 10MB).', 'error');
+                    continue;
                 }
                 
-                const progress = ((totalFiles - uploadQueue.length) / totalFiles) * 100;
-                const statusText = (totalFiles - uploadQueue.length) + ' von ' + totalFiles + ' Fotos';
-                updateUploadProgress(progress, statusText);
+                await uploadFile(file, allowDownload);
             }
-            
-            if (failedUploads.length === 0) {
-                showAlert('uploadAlert', '✅ ' + uploadedCount + ' Foto(s) erfolgreich hochgeladen!', 'success');
-            } else {
-                showAlert('uploadAlert', '⚠️ ' + uploadedCount + ' erfolgreich, ' + failedUploads.length + ' fehlgeschlagen', 'error');
-            }
-            
-            await loadPhotos();
-            
-            isUploading = false;
-            hideUploadProgress();
         }
 
-        // Upload single file
-        async function uploadFile(file) {
+        async function uploadFile(file, allowDownload) {
             try {
-                if (!file.type.startsWith('image/')) {
-                    console.error('Not an image file:', file.name);
-                    return false;
-                }
+                document.getElementById('uploadProgress').classList.remove('hidden');
+                updateProgress(0, 'Lade "' + file.name + '" hoch...');
                 
+                // Generate unique filename
                 const timestamp = Date.now();
-                const randomStr = Math.random().toString(36).substring(7);
-                const extension = file.name.split('.').pop();
-                const fileName = timestamp + '_' + randomStr + '.' + extension;
+                const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+                const fileName = timestamp + '_' + safeName;
                 const filePath = 'uploads/' + currentUser.email + '/' + fileName;
                 
-                console.log('Uploading:', filePath);
-                
+                // Upload to Supabase Storage
                 const { data, error } = await supabase.storage
                     .from('sommerfest-fotos-2025')
                     .upload(filePath, file, {
@@ -867,41 +828,65 @@
                     });
                 
                 if (error) {
-                    console.error('Upload error:', error);
-                    return false;
+                    throw error;
                 }
                 
+                updateProgress(50, 'Speichere Metadaten...');
+                
+                // Save metadata to database (without uploader_type field)
                 const { error: dbError } = await supabase
                     .from('fotos_2025')
                     .insert([{
                         uploader_email: currentUser.email,
                         uploader_name: currentUser.name,
-                        uploader_type: currentUser.type,
                         filename: fileName,
                         original_filename: file.name,
                         file_path: filePath,
-                        download_allowed: true,
+                        download_allowed: allowDownload,
                         file_size: file.size,
                         mime_type: file.type
                     }]);
                 
                 if (dbError) {
-                    console.error('Database error:', dbError);
+                    // If the file was uploaded but DB insert failed, try to delete the file
                     await supabase.storage.from('sommerfest-fotos-2025').remove([filePath]);
-                    return false;
+                    throw dbError;
                 }
                 
-                console.log('Upload successful:', fileName);
-                return true;
+                updateProgress(100, 'Fertig!');
+                showStatus('Foto "' + file.name + '" erfolgreich hochgeladen! 📸', 'success');
                 
-            } catch (err) {
-                console.error('Upload exception:', err);
-                return false;
+                // Reload gallery
+                setTimeout(() => {
+                    document.getElementById('uploadProgress').classList.add('hidden');
+                    loadPhotos();
+                }, 1000);
+                
+            } catch (error) {
+                console.error('Upload error:', error);
+                document.getElementById('uploadProgress').classList.add('hidden');
+                
+                // Better error messages
+                if (error.message?.includes('Bucket not found')) {
+                    showStatus('Speicher nicht konfiguriert. Bitte kontaktieren Sie den Administrator.', 'error');
+                } else if (error.message?.includes('row-level security')) {
+                    showStatus('Keine Berechtigung zum Upload. Bitte melden Sie sich erneut an.', 'error');
+                } else {
+                    showStatus('Fehler beim Hochladen: ' + (error.message || 'Unbekannter Fehler'), 'error');
+                }
             }
         }
 
-        // Load and display photos
+        function updateProgress(percent, text) {
+            document.getElementById('progressBar').style.width = percent + '%';
+            document.getElementById('progressText').textContent = text;
+        }
+
+        // Load Photos from Database
         async function loadPhotos() {
+            const loadingElement = document.getElementById('loadingGallery');
+            loadingElement.classList.remove('hidden');
+            
             try {
                 const { data: photos, error } = await supabase
                     .from('fotos_2025')
@@ -909,130 +894,114 @@
                     .order('uploaded_at', { ascending: false });
                 
                 if (error) {
-                    console.error('Error loading photos:', error);
-                    return;
+                    throw error;
                 }
                 
-                const grid = document.getElementById('photoGrid');
-                const count = document.getElementById('photoCount');
+                displayPhotos(photos);
                 
-                if (!photos || photos.length === 0) {
-                    grid.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem; grid-column: 1/-1;">Noch keine Fotos vorhanden. Seien Sie der Erste!</p>';
-                    count.textContent = '0';
-                    return;
+            } catch (error) {
+                console.error('Load photos error:', error);
+                if (error.message?.includes('relation "public.fotos_2025" does not exist')) {
+                    showStatus('Die Foto-Datenbank wurde noch nicht eingerichtet. Bitte warten Sie auf die Freischaltung.', 'info');
+                } else {
+                    showStatus('Fehler beim Laden der Fotos: ' + error.message, 'error');
                 }
-                
-                count.textContent = photos.length;
-                
-                grid.innerHTML = photos.map(photo => {
-                    const imageUrl = SUPABASE_URL + '/storage/v1/object/public/sommerfest-fotos-2025/' + photo.file_path;
-                    const uploaderName = photo.uploader_name || 'Unbekannt';
-                    const uploadDate = new Date(photo.uploaded_at).toLocaleDateString('de-DE');
-                    
-                    return '<div class="photo-item" onclick="downloadPhoto(\'' + imageUrl + '\', \'' + photo.original_filename + '\')">' +
-                           '<img src="' + imageUrl + '" alt="' + photo.original_filename + '" loading="lazy">' +
-                           '<div class="photo-info">' +
-                           '<div class="photo-name">' + photo.original_filename + '</div>' +
-                           '<div class="photo-uploader">Von ' + uploaderName + ' • ' + uploadDate + '</div>' +
-                           '</div></div>';
-                }).join('');
-                
-            } catch (err) {
-                console.error('Error in loadPhotos:', err);
-                showAlert('uploadAlert', 'Fehler beim Laden der Fotos', 'error');
+                displayPhotos([]);
+            } finally {
+                loadingElement.classList.add('hidden');
             }
         }
 
-        // Download photo
-        function downloadPhoto(url, filename) {
-            if (confirm('Möchten Sie "' + filename + '" herunterladen?')) {
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = filename;
-                a.target = '_blank';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
+        // Display Photos in Grid
+        function displayPhotos(photos) {
+            const grid = document.getElementById('photoGrid');
+            
+            if (!photos || photos.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #666;"><h3>Noch keine Fotos hochgeladen</h3><p>Seien Sie der Erste und teilen Sie Ihre Momente!</p></div>';
+                return;
             }
+            
+            grid.innerHTML = photos.map(photo => createPhotoCard(photo)).join('');
         }
 
-        // UI Helper Functions
-        function showAlert(elementId, message, type) {
-            const alert = document.getElementById(elementId);
-            alert.textContent = message;
-            alert.className = 'alert ' + type + ' show';
+        // Create Photo Card HTML
+        function createPhotoCard(photo) {
+            const imageUrl = SUPABASE_URL + '/storage/v1/object/public/sommerfest-fotos-2025/' + photo.file_path;
+            const uploadDate = new Date(photo.uploaded_at).toLocaleDateString('de-DE', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            const downloadButton = photo.download_allowed ? 
+                '<button class="btn btn-secondary" style="font-size: 0.875rem; padding: 0.5rem 1rem;" onclick="downloadPhoto(\'' + photo.file_path + '\', \'' + photo.original_filename + '\')">💾 Download</button>' : 
+                '<span style="font-size: 0.75rem; color: #999;">🔒 Nur Ansicht</span>';
+            
+            return '<div class="photo-card"><img src="' + imageUrl + '" alt="' + photo.original_filename + '" class="photo-img" onclick="openLightbox(\'' + imageUrl + '\', \'' + photo.original_filename + '\')" loading="lazy" onerror="this.onerror=null; this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><rect width=%22100%22 height=%22100%22 fill=%22%23ddd%22/><text x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 dy=%22.3em%22>Fehler</text></svg>\'"><div class="photo-info"><h4>' + photo.original_filename + '</h4><div class="photo-meta">Von: ' + photo.uploader_name + '<br>' + uploadDate + '</div><div class="photo-actions">' + downloadButton + '</div></div></div>';
+        }
+
+        // Download Photo
+        function downloadPhoto(filePath, originalFilename) {
+            const url = SUPABASE_URL + '/storage/v1/object/public/sommerfest-fotos-2025/' + filePath;
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = originalFilename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showStatus('Download gestartet...', 'info');
+        }
+
+        // Lightbox functionality
+        function openLightbox(imageUrl, title) {
+            // Create fullscreen viewer
+            const lightbox = document.createElement('div');
+            lightbox.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; display: flex; align-items: center; justify-content: center; cursor: pointer;';
+            
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.style.cssText = 'max-width: 90%; max-height: 90%; object-fit: contain;';
+            
+            lightbox.appendChild(img);
+            lightbox.onclick = () => document.body.removeChild(lightbox);
+            document.body.appendChild(lightbox);
+        }
+
+        // Utility Functions
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message status-' + type;
+            statusMessage.classList.remove('hidden');
             
             setTimeout(() => {
-                alert.classList.remove('show');
+                statusMessage.classList.add('hidden');
             }, 5000);
         }
 
-        function showUploadProgress() {
-            document.getElementById('uploadProgress').style.display = 'block';
-            document.getElementById('uploadArea').classList.add('uploading');
-        }
-
-        function hideUploadProgress() {
-            document.getElementById('uploadProgress').style.display = 'none';
-            document.getElementById('uploadArea').classList.remove('uploading');
-            document.getElementById('progressFill').style.width = '0%';
-        }
-
-        function updateUploadProgress(percent, status) {
-            document.getElementById('progressFill').style.width = percent + '%';
-            document.getElementById('uploadStatus').textContent = status;
-        }
-
-        // Drag and Drop Support (Desktop)
-        const uploadArea = document.getElementById('uploadArea');
-
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            uploadArea.addEventListener(eventName, preventDefaults, false);
-            document.body.addEventListener(eventName, preventDefaults, false);
-        });
-
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-
-        ['dragenter', 'dragover'].forEach(eventName => {
-            uploadArea.addEventListener(eventName, () => {
-                uploadArea.classList.add('dragover');
-            }, false);
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            uploadArea.addEventListener(eventName, () => {
-                uploadArea.classList.remove('dragover');
-            }, false);
-        });
-
-        uploadArea.addEventListener('drop', (e) => {
-            const files = e.dataTransfer.files;
-            if (files && files.length > 0) {
-                uploadQueue.push(...Array.from(files));
-                if (!isUploading) {
-                    processUploadQueue();
-                }
+        function setLoginLoading(form, loading) {
+            const button = form.querySelector('button[type="submit"]');
+            const text = button.querySelector('.button-text');
+            const spinner = button.querySelector('.spinner');
+            
+            if (loading) {
+                button.disabled = true;
+                if (text) text.style.display = 'none';
+                if (spinner) spinner.classList.remove('hidden');
+            } else {
+                button.disabled = false;
+                if (text) text.style.display = 'inline';
+                if (spinner) spinner.classList.add('hidden');
             }
-        }, false);
+        }
 
-        // Service Worker Registration
+        // Service Worker for PWA
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(reg => console.log('Service Worker registered'))
-                    .catch(err => console.log('Service Worker registration failed'));
-            });
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('Service Worker registered'))
+                .catch(err => console.log('Service Worker registration failed'));
         }
-
-        // Refresh photos every 30 seconds
-        setInterval(() => {
-            if (!isUploading && currentUser) {
-                loadPhotos();
-            }
-        }, 30000);
     </script>
 </body>
 </html>
