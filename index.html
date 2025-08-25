@@ -2,12 +2,14 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Sommerfest 2025 - Foto-Galerie</title>
     
     <!-- PWA Meta Tags -->
     <meta name="description" content="Foto-Galerie vom Sommerfest 2025 der Lübecker Freimaurer">
     <meta name="theme-color" content="#2c5aa0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <link rel="manifest" href="manifest.json">
     
     <!-- Supabase Client -->
@@ -18,6 +20,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -30,6 +33,7 @@
         .header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             padding: 1rem;
             box-shadow: 0 2px 20px rgba(0,0,0,0.1);
             position: sticky;
@@ -40,7 +44,7 @@
         .header h1 {
             color: #2c5aa0;
             text-align: center;
-            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-size: clamp(1.2rem, 4vw, 2rem);
             font-weight: 700;
             margin: 0;
         }
@@ -48,19 +52,44 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem 1rem;
+            padding: 1rem;
         }
 
         .login-section {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
-            padding: 2rem;
-            margin-bottom: 2rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
         }
 
+        .login-section h2 {
+            color: #2c5aa0;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2c5aa0;
+        }
+
         .btn {
-            padding: 0.75rem 1.5rem;
+            width: 100%;
+            padding: 0.9rem 1.5rem;
             border: none;
             border-radius: 8px;
             font-size: 1rem;
@@ -68,6 +97,19 @@
             cursor: pointer;
             background: #2c5aa0;
             color: white;
+            transition: all 0.3s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+            background: #234a87;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .upload-area {
@@ -78,48 +120,282 @@
             cursor: pointer;
             transition: all 0.3s ease;
             background: rgba(44, 90, 160, 0.05);
+            position: relative;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .upload-area.dragover {
+            background: rgba(44, 90, 160, 0.15);
+            border-color: #1e3c72;
+            transform: scale(1.02);
+        }
+
+        .upload-area.uploading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-text {
+            color: #2c5aa0;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-subtext {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .upload-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .upload-btn {
+            padding: 0.75rem 1.5rem;
+            background: #2c5aa0;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .upload-btn:active {
+            transform: scale(0.95);
+        }
+
+        .upload-progress {
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #2c5aa0;
+            transition: width 0.3s;
+            border-radius: 3px;
+        }
+
+        .upload-status {
+            margin-top: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
         }
 
         .photo-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .photo-item {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .photo-item:active {
+            transform: scale(0.98);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-info {
+            padding: 0.75rem;
+        }
+
+        .photo-name {
+            font-weight: 500;
+            color: #333;
+            font-size: 0.9rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .photo-uploader {
+            color: #666;
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .alert.success {
+            background: #d4f8d4;
+            color: #2d6a2d;
+            border: 1px solid #9bd89b;
+        }
+
+        .alert.error {
+            background: #ffd4d4;
+            color: #8b2929;
+            border: 1px solid #ff9b9b;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         .hidden {
             display: none !important;
         }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0.5rem;
+            }
+            
+            .login-section {
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+            
+            .photo-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 0.5rem;
+            }
+            
+            .upload-buttons {
+                width: 100%;
+            }
+            
+            .upload-btn {
+                flex: 1;
+                min-width: 120px;
+            }
+        }
+
+        @supports (-webkit-touch-callout: none) {
+            input[type="file"] {
+                -webkit-appearance: none;
+            }
+        }
     </style>
 </head>
 <body>
     <header class="header">
-        <h1>🎉 Sommerfest 2025 - Foto-Galerie</h1>
+        <h1>🎉 Sommerfest 2025 - Fotos</h1>
     </header>
 
     <div class="container">
         <div id="loginSection" class="login-section">
             <h2>🔐 Zugang zur Foto-Galerie</h2>
+            
+            <div id="loginAlert" class="alert"></div>
+            
             <form id="loginForm">
-                <input type="email" id="email" placeholder="E-Mail-Adresse" required>
-                <input type="password" id="password" placeholder="Gäste-Code (optional)">
-                <button type="submit" class="btn">Anmelden</button>
+                <div class="form-group">
+                    <input type="email" id="email" placeholder="E-Mail-Adresse" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" placeholder="Gäste-Code: gaeste2025" autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn" id="loginBtn">
+                    <span id="loginBtnText">Anmelden</span>
+                </button>
             </form>
         </div>
 
         <div id="appSection" class="hidden">
             <div class="login-section">
                 <h2>📸 Fotos hochladen</h2>
+                
+                <div id="uploadAlert" class="alert"></div>
+                
                 <div id="uploadArea" class="upload-area">
-                    <div>📸</div>
-                    <h3>Fotos hier ablegen oder klicken</h3>
-                    <input type="file" id="fileInput" accept="image/*" multiple style="display: none;">
+                    <div class="upload-icon">📷</div>
+                    <div class="upload-text">Fotos auswählen</div>
+                    <div class="upload-subtext">Tippen zum Auswählen oder Fotografieren</div>
+                    
+                    <div class="upload-buttons">
+                        <button class="upload-btn" id="selectPhotosBtn">
+                            📁 Aus Galerie
+                        </button>
+                        <button class="upload-btn" id="takePictureBtn">
+                            📷 Foto aufnehmen
+                        </button>
+                    </div>
+                    
+                    <input type="file" 
+                           id="fileInputGallery" 
+                           accept="image/*" 
+                           multiple 
+                           style="display: none;">
+                    
+                    <input type="file" 
+                           id="fileInputCamera" 
+                           accept="image/*" 
+                           capture="environment" 
+                           style="display: none;">
+                </div>
+                
+                <div id="uploadProgress" class="upload-progress">
+                    <div class="progress-bar">
+                        <div id="progressFill" class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    <div id="uploadStatus" class="upload-status">Uploading...</div>
                 </div>
             </div>
 
             <div class="login-section">
-                <h2>🖼️ Foto-Galerie</h2>
-                <div id="photoGrid" class="photo-grid"></div>
+                <h2>🖼️ Foto-Galerie (<span id="photoCount">0</span> Fotos)</h2>
+                <div id="photoGrid" class="photo-grid">
+                    <p style="text-align: center; color: #666; padding: 2rem;">
+                        Noch keine Fotos vorhanden. Sei der Erste!
+                    </p>
+                </div>
             </div>
         </div>
     </div>
@@ -127,43 +403,164 @@
     <script>
         const SUPABASE_URL = 'https://database.frankrath.de';
         const SUPABASE_ANON_KEY = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc0NzA3MzU4MCwiZXhwIjo0OTAyNzQ3MTgwLCJyb2xlIjoiYW5vbiJ9.0l5w0smQh1FDN-nGnfmNbX80smyL-XcQM9C69OwE3Vo';
+        const GUEST_CODE = 'gaeste2025';
         
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        const N8N_BASE_URL = 'https://automatisierung.frankrath.de/webhook';
         
         let currentUser = null;
-        
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            // Simplified authentication
-            if (password === 'gaeste2025' || email) {
-                currentUser = { email: email, name: email.split('@')[0] };
-                localStorage.setItem('sommerfest_foto_user', JSON.stringify(currentUser));
-                document.getElementById('loginSection').classList.add('hidden');
-                document.getElementById('appSection').classList.remove('hidden');
-                loadPhotos();
+        let uploadQueue = [];
+        let isUploading = false;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedUser = localStorage.getItem('sommerfest_foto_user');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showApp();
             }
         });
 
-        document.getElementById('uploadArea').addEventListener('click', () => {
-            document.getElementById('fileInput').click();
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+            if (password === GUEST_CODE || email) {
+                currentUser = { 
+                    email: email || 'gast@sommerfest2025.de', 
+                    name: email ? email.split('@')[0] : 'Gast' 
+                };
+                
+                localStorage.setItem('sommerfest_foto_user', JSON.stringify(currentUser));
+                showAlert('loginAlert', 'Erfolgreich angemeldet!', 'success');
+                
+                setTimeout(() => {
+                    showApp();
+                }, 500);
+            } else {
+                showAlert('loginAlert', 'Bitte E-Mail eingeben oder Gäste-Code verwenden', 'error');
+            }
         });
 
-        document.getElementById('fileInput').addEventListener('change', async (e) => {
-            const files = Array.from(e.target.files);
-            for (let file of files) {
-                const fileName = Date.now() + '_' + file.name;
-                const filePath = 'uploads/' + currentUser.email + '/' + fileName;
+        function showApp() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('appSection').classList.remove('hidden');
+            loadPhotos();
+        }
+
+        document.getElementById('selectPhotosBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('fileInputGallery').click();
+        });
+
+        document.getElementById('takePictureBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('fileInputCamera').click();
+        });
+
+        ['fileInputGallery', 'fileInputCamera'].forEach(inputId => {
+            const input = document.getElementById(inputId);
+            
+            ['change', 'input'].forEach(eventType => {
+                input.addEventListener(eventType, handleFileSelect, false);
+            });
+        });
+
+        async function handleFileSelect(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const files = e.target.files;
+            
+            if (!files || files.length === 0) {
+                console.log('No files selected');
+                return;
+            }
+            
+            console.log(`${files.length} files selected for upload`);
+            
+            const fileArray = Array.from(files);
+            uploadQueue.push(...fileArray);
+            
+            if (!isUploading) {
+                processUploadQueue();
+            }
+            
+            e.target.value = '';
+        }
+
+        async function processUploadQueue() {
+            if (uploadQueue.length === 0) {
+                isUploading = false;
+                hideUploadProgress();
+                return;
+            }
+            
+            isUploading = true;
+            showUploadProgress();
+            
+            const totalFiles = uploadQueue.length;
+            let uploadedCount = 0;
+            let failedUploads = [];
+            
+            while (uploadQueue.length > 0) {
+                const file = uploadQueue.shift();
+                const success = await uploadFile(file);
+                
+                if (success) {
+                    uploadedCount++;
+                } else {
+                    failedUploads.push(file.name);
+                }
+                
+                const progress = ((totalFiles - uploadQueue.length) / totalFiles) * 100;
+                updateUploadProgress(progress, `${totalFiles - uploadQueue.length} von ${totalFiles} Fotos`);
+            }
+            
+            if (failedUploads.length === 0) {
+                showAlert('uploadAlert', `✅ ${uploadedCount} Foto(s) erfolgreich hochgeladen!`, 'success');
+            } else {
+                showAlert('uploadAlert', `⚠️ ${uploadedCount} erfolgreich, ${failedUploads.length} fehlgeschlagen`, 'error');
+            }
+            
+            await loadPhotos();
+            
+            isUploading = false;
+            hideUploadProgress();
+        }
+
+        async function uploadFile(file) {
+            try {
+                if (!file.type.startsWith('image/')) {
+                    console.error('Not an image file:', file.name);
+                    return false;
+                }
+                
+                const timestamp = Date.now();
+                const randomStr = Math.random().toString(36).substring(7);
+                const extension = file.name.split('.').pop();
+                const fileName = `${timestamp}_${randomStr}.${extension}`;
+                const filePath = `uploads/${currentUser.email}/${fileName}`;
+                
+                console.log('Uploading:', filePath);
                 
                 const { data, error } = await supabase.storage
                     .from('sommerfest-fotos-2025')
-                    .upload(filePath, file);
+                    .upload(filePath, file, {
+                        cacheControl: '3600',
+                        upsert: false
+                    });
                 
-                if (!error) {
-                    await supabase.from('fotos_2025').insert([{
+                if (error) {
+                    console.error('Upload error:', error);
+                    return false;
+                }
+                
+                const { error: dbError } = await supabase
+                    .from('fotos_2025')
+                    .insert([{
                         uploader_email: currentUser.email,
                         uploader_name: currentUser.name,
                         filename: fileName,
@@ -173,27 +570,156 @@
                         file_size: file.size,
                         mime_type: file.type
                     }]);
+                
+                if (dbError) {
+                    console.error('Database error:', dbError);
+                    await supabase.storage.from('sommerfest-fotos-2025').remove([filePath]);
+                    return false;
                 }
+                
+                console.log('Upload successful:', fileName);
+                return true;
+                
+            } catch (err) {
+                console.error('Upload exception:', err);
+                return false;
             }
-            loadPhotos();
-        });
+        }
 
         async function loadPhotos() {
-            const { data: photos } = await supabase
-                .from('fotos_2025')
-                .select('*')
-                .order('uploaded_at', { ascending: false });
-            
-            const grid = document.getElementById('photoGrid');
-            grid.innerHTML = photos ? photos.map(photo => {
-                const imageUrl = SUPABASE_URL + '/storage/v1/object/public/sommerfest-fotos-2025/' + photo.file_path;
-                return '<div><img src="' + imageUrl + '" style="width:100%"><p>' + photo.original_filename + '</p></div>';
-            }).join('') : '<p>Keine Fotos vorhanden</p>';
+            try {
+                const { data: photos, error } = await supabase
+                    .from('fotos_2025')
+                    .select('*')
+                    .order('uploaded_at', { ascending: false });
+                
+                if (error) {
+                    console.error('Error loading photos:', error);
+                    return;
+                }
+                
+                const grid = document.getElementById('photoGrid');
+                const count = document.getElementById('photoCount');
+                
+                if (!photos || photos.length === 0) {
+                    grid.innerHTML = `
+                        <p style="text-align: center; color: #666; padding: 2rem; grid-column: 1/-1;">
+                            Noch keine Fotos vorhanden. Sei der Erste!
+                        </p>
+                    `;
+                    count.textContent = '0';
+                    return;
+                }
+                
+                count.textContent = photos.length;
+                
+                grid.innerHTML = photos.map(photo => {
+                    const imageUrl = `${SUPABASE_URL}/storage/v1/object/public/sommerfest-fotos-2025/${photo.file_path}`;
+                    const uploaderName = photo.uploader_name || 'Unbekannt';
+                    const uploadDate = new Date(photo.uploaded_at).toLocaleDateString('de-DE');
+                    
+                    return `
+                        <div class="photo-item" onclick="downloadPhoto('${imageUrl}', '${photo.original_filename}')">
+                            <img src="${imageUrl}" alt="${photo.original_filename}" loading="lazy">
+                            <div class="photo-info">
+                                <div class="photo-name">${photo.original_filename}</div>
+                                <div class="photo-uploader">Von ${uploaderName} • ${uploadDate}</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+            } catch (err) {
+                console.error('Error in loadPhotos:', err);
+                showAlert('uploadAlert', 'Fehler beim Laden der Fotos', 'error');
+            }
         }
 
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js');
+        function downloadPhoto(url, filename) {
+            if (confirm(`Möchten Sie "${filename}" herunterladen?`)) {
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.target = '_blank';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
         }
+
+        function showAlert(elementId, message, type) {
+            const alert = document.getElementById(elementId);
+            alert.textContent = message;
+            alert.className = `alert ${type} show`;
+            
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 5000);
+        }
+
+        function showUploadProgress() {
+            document.getElementById('uploadProgress').style.display = 'block';
+            document.getElementById('uploadArea').classList.add('uploading');
+        }
+
+        function hideUploadProgress() {
+            document.getElementById('uploadProgress').style.display = 'none';
+            document.getElementById('uploadArea').classList.remove('uploading');
+            document.getElementById('progressFill').style.width = '0%';
+        }
+
+        function updateUploadProgress(percent, status) {
+            document.getElementById('progressFill').style.width = `${percent}%`;
+            document.getElementById('uploadStatus').textContent = status;
+        }
+
+        const uploadArea = document.getElementById('uploadArea');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, () => {
+                uploadArea.classList.add('dragover');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, () => {
+                uploadArea.classList.remove('dragover');
+            }, false);
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            const files = e.dataTransfer.files;
+            if (files && files.length > 0) {
+                uploadQueue.push(...Array.from(files));
+                if (!isUploading) {
+                    processUploadQueue();
+                }
+            }
+        }, false);
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Service Worker registered'))
+                    .catch(err => console.log('Service Worker registration failed'));
+            });
+        }
+
+        setInterval(() => {
+            if (!isUploading && currentUser) {
+                loadPhotos();
+            }
+        }, 30000);
     </script>
 </body>
 </html>
