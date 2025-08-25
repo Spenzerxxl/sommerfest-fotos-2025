@@ -452,7 +452,7 @@
             </div>
 
             <!-- Photo Gallery -->
-            <div class="upload-section">
+            <div class="upload-section" id="gallerySection">
                 <h2 class="upload-title">🖼️ Foto-Galerie</h2>
 
                 <div id="photoGrid" class="photo-grid">
@@ -574,6 +574,7 @@
             loginSection.classList.add('hidden');
             appSection.classList.remove('hidden');
             document.getElementById('uploadSection').style.display = 'block';
+            document.getElementById('gallerySection').style.display = 'block';
         }
 
         // File Upload Handlers
