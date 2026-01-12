@@ -1,0 +1,41 @@
+{
+  "permissions": {
+    "allow": [
+      "npm run build",
+      "npm run dev",
+      "npm run lint",
+      "npm test",
+      "npx",
+      "git status",
+      "git diff",
+      "git log",
+      "git branch",
+      "cat",
+      "ls",
+      "pwd",
+      "head",
+      "tail",
+      "grep",
+      "find",
+      "echo"
+    ],
+    "ask": [
+      "git push",
+      "git push --force",
+      "npm install",
+      "npm publish",
+      "rm -r",
+      "docker"
+    ],
+    "deny": [
+      "rm -rf /",
+      "rm -rf ~",
+      "rm -rf .",
+      "DROP TABLE",
+      "DROP DATABASE",
+      "DELETE FROM",
+      "shutdown",
+      "reboot"
+    ]
+  }
+}
